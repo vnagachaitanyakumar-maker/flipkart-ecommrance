@@ -108,9 +108,9 @@ screenshots/
 
 <img width="1900" height="906" alt="image" src="https://github.com/user-attachments/assets/62214dd7-eeb3-489f-adad-27fb27cc6b62" />
 
-```
 
----
+
+
 
 ## 🎯 Future Improvements
 
@@ -156,5 +156,5 @@ If you like this project, don't forget to **Star ⭐ the repository**.
 ## 📬 Contact
 
 - LinkedIn: https://www.linkedin.com/in/v-naga-chaitanya-kumar-9a6b1038b
-- GitHub: https://github.com/your-vnagachaitanyakumar-maker
-- Email: your-vnagachaitanyakumar@gmail.com
+- GitHub: https://github.com/vnagachaitanyakumar-maker
+- Email: vnagachaitanyakumar@gmail.com
