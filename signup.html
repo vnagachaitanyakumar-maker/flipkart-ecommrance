@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - E-Store</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+        }
+        .left-section {
+            flex: 1;
+            background: linear-gradient(135deg, #2874f0 0%, #1a5bc4 100%);
+            color: white;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .logo {
+            font-size: 42px;
+            font-weight: bold;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        .tagline {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        .tagline span { color: #ffeb3b; }
+        .sub-tagline {
+            font-size: 24px;
+            font-weight: 500;
+            opacity: 0.95;
+            margin-bottom: 40px;
+        }
+        .platforms {
+            font-size: 18px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        .platforms strong { color: #ffeb3b; }
+        .right-section {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-header h2 {
+            font-size: 28px;
+            color: #212121;
+            margin-bottom: 10px;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #212121;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+        .form-input:focus {
+            border-color: #2874f0;
+            box-shadow: 0 0 0 3px rgba(40, 116, 240, 0.1);
+        }
+        .signup-btn {
+            width: 100%;
+            padding: 16px;
+            background: #fb641b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .signup-btn:hover { background: #f4511e; }
+        .login-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        @media (max-width: 968px) {
+            body { flex-direction: column; }
+            .left-section { padding: 40px; min-height: 300px; }
+            .tagline { font-size: 36px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="left-section">
+        <div class="logo">E-Store</div>
+        <div class="tagline">YOU SELL.<br><span>WE DELIVER.</span></div>
+        <div class="sub-tagline">Best Deals, Quality Products!</div>
+        <div class="platforms">
+            <strong>Shopify, Instagram, Facebook</strong><br>
+            Get access to exclusive deals
+        </div>
+    </div>
+
+    <div class="right-section">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>Create Account</h2>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <form id="signupForm">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" id="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="password" placeholder="Min 6 characters" minlength="6" required>
+                </div>
+
+                <button type="submit" class="signup-btn" id="signupBtn">Sign Up</button>
+            </form>
+
+            <div class="login-link">
+                Already have an account? <a href="login.html">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if already logged in
+        const token = localStorage.getItem('token');
+        if (token) {
+            fetch('http://localhost:3000/api/user/profile', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }).then(res => {
+                if (res.ok) window.location.href = 'index.html';
+            });
+        }
+
+        // Handle signup
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const signupBtn = document.getElementById('signupBtn');
+            const errorDiv = document.getElementById('errorMessage');
+            
+            errorDiv.style.display = 'none';
+            signupBtn.disabled = true;
+            signupBtn.textContent = 'Creating account...';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    alert('Account created! Redirecting...');
+                    window.location.href = 'index.html';
+                } else {
+                    errorDiv.textContent = data.message || 'Signup failed';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Cannot connect to server. Is backend running?';
+                errorDiv.style.display = 'block';
+            } finally {
+                signupBtn.disabled = false;
+                signupBtn.textContent = 'Sign Up';
+            }
+        });
+    </script>

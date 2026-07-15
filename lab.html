@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Quick Commerce App</title>
+<style>
+body {
+font-family: Arial;
+margin: 0;
+background: #f2f2f2;
+}
+header {
+background: purple;
+color: white;
+padding: 10px;
+display: flex;
+justify-content: space-between;
+}
+.container {
+width: 350px;
+margin: 40px auto;
+background: white;
+padding: 20px;
+border-radius: 8px;
+text-align: center;
+}
+input {
+width: 90%;
+padding: 8px;
+margin: 10px 0;
+}
+button {
+padding: 8px 12px;
+background: purple;
+color: white;
+border: none;
+cursor: pointer;
+margin: 5px;
+}
+.product-card {
+background: white;
+padding: 15px;
+margin: 10px;
+border-radius: 8px;
+}
+.hidden {
+display: none;
+}
+</style>
+</head>
+<body>
+<!-- LOGIN PAGE-->
+<div id="loginPage" class="container">
+<h2>Login</h2>
+<input type="text" id="username" placeholder="Enter Username">
+<input type="password" id="password" placeholder="Enter Password">
+<button onclick="login()">Login</button>
+</div>
+<!-- PRODUCTS PAGE-->
+<div id="productsPage" class="hidden">
+<header>
+<h3>Quick Commerce</h3>
+<div>
+<button onclick="showCart()">Cart</button>
+<button onclick="logout()">Logout</button>
+</div>
+</header>
+<div id="productList" class="container"></div>
+</div>
+<!-- DETAILS PAGE-->
+<div id="detailsPage" class="container hidden"></div>
+<!-- CART PAGE-->
+<div id="cartPage" class="container hidden">
+<h2>Your Cart</h2>
+<div id="cartItems"></div>
+<h3 id="total"></h3>
+<button onclick="showProducts()">Back to Products</button>
+</div>
+<script>
+const products = [
+{id:1, name:"Milk", price:50, description:"Fresh dairy milk"},
+{id:2, name:"Bread", price:30, description:"Whole wheat bread"},
+{id:3, name:"Eggs", price:60, description:"Farm fresh eggs"},
+{id:4, name:"Rice", price:80, description:"Premium quality rice"}
+];
+let cart = [];
+function login() {
+let user = document.getElementById("username").value;
+let pass = document.getElementById("password").value;
+if(user && pass){
+document.getElementById("loginPage").classList.add("hidden");
+document.getElementById("productsPage").classList.remove("hidden");
+loadProducts();
+} else {
+alert("Enter username and password");
+}
+}
+function logout() {
+location.reload();
+}
+function loadProducts(){
+let productList = document.getElementById("productList");
+productList.innerHTML = "";
+products.forEach(product => {
+productList.innerHTML += `
+<div class="product-card">
+Malla Reddy Technical Campus
+Department of CSE
+B. TECH I YEARII SEMESTER WEBAPPLICATION DEVELOPMENT-II LAB MANUAL
+<h3>${product.name}</h3>
+<p>₹${product.price}</p>
+<button onclick="viewDetails(${product.id})">View Details</button>
+</div>
+`;
+});
+}
+function viewDetails(id){
+let product = products.find(p => p.id === id);
+document.getElementById("productsPage").classList.add("hidden");
+document.getElementById("detailsPage").classList.remove("hidden");
+document.getElementById("detailsPage").innerHTML = `
+<h2>${product.name}</h2>
+<p>Price: ₹${product.price}</p>
+<p>${product.description}</p>
+<button onclick="addToCart(${product.id})">Add to Cart</button>
+<button onclick="showProducts()">Back</button>
+`;
+}
+function addToCart(id){
+let product = products.find(p => p.id === id);
+cart.push(product);
+alert("Added to Cart!");
+}
+function showCart(){
+document.getElementById("productsPage").classList.add("hidden");
+document.getElementById("detailsPage").classList.add("hidden");
+document.getElementById("cartPage").classList.remove("hidden");
+let cartItems = document.getElementById("cartItems");
+cartItems.innerHTML = "";
+let total = 0;
+cart.forEach(item => {
+total += item.price;
+cartItems.innerHTML += `<p>${item.name}- ₹${item.price}</p>`;
+});
+document.getElementById("total").innerText = "Total: ₹" + total;
+}
+function showProducts(){
+document.getElementById("cartPage").classList.add("hidden");
+document.getElementById("detailsPage").classList.add("hidden");
+document.getElementById("productsPage").classList.remove("hidden");
+}
+</script>
+</body>
+</html>

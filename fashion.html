@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion - E-Store</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f1f3f6; }
+        
+        .header { background: #2874f0; color: white; padding: 8px 0; position: sticky; top: 0; z-index: 1000; }
+        .header-container { max-width: 1248px; margin: 0 auto; display: flex; align-items: center; padding: 0 20px; }
+        .logo { font-size: 20px; font-weight: bold; margin-right: 20px; color: white; text-decoration: none; }
+        .search-bar { flex: 1; display: flex; align-items: center; background: white; border-radius: 2px; margin-right: 20px; }
+        .search-input { flex: 1; border: none; padding: 10px; font-size: 14px; outline: none; }
+        .search-btn { background: white; border: none; padding: 10px 20px; color: #2874f0; cursor: pointer; font-weight: 500; }
+        .header-actions { display: flex; align-items: center; gap: 20px; }
+        .header-btn { background: white; color: #2874f0; border: none; padding: 5px 40px; font-size: 16px; cursor: pointer; text-decoration: none; }
+        .cart-icon { position: relative; cursor: pointer; color: white; font-size: 20px; }
+        .cart-count { position: absolute; top: -8px; right: -8px; background: #ff6161; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; font-weight: bold; }
+        
+        .navbar { background: white; border-bottom: 1px solid #f0f0f0; }
+        .nav-container { max-width: 1248px; margin: 0 auto; display: flex; align-items: center; padding: 0 20px; }
+        .nav-item { padding: 10px 20px; color: #212121; text-decoration: none; font-weight: 500; transition: all 0.2s; }
+        .nav-item:hover, .nav-item.active { color: #2874f0; border-bottom: 2px solid #2874f0; }
+        
+        .fashion-banner { background: linear-gradient(135deg, #ff6b6b, #ee5a24); padding: 60px 20px; text-align: center; color: white; margin-bottom: 30px; }
+        .fashion-banner h1 { font-size: 42px; margin-bottom: 20px; }
+        .fashion-banner p { font-size: 18px; margin-bottom: 30px; }
+        .shop-fashion-btn { background: white; color: #ff6b6b; border: none; padding: 15px 40px; font-size: 18px; font-weight: bold; border-radius: 30px; cursor: pointer; text-decoration: none; display: inline-block; }
+        
+        .fashion-categories { max-width: 1248px; margin: 0 auto; padding: 20px; margin-bottom: 40px; }
+        .categories-title { font-size: 28px; color: #212121; margin-bottom: 30px; text-align: center; }
+        .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .category-card { background: white; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; transition: all 0.3s; text-decoration: none; color: inherit; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .category-card:hover { transform: translateY(-8px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .category-icon { font-size: 48px; margin-bottom: 15px; color: #ff6b6b; }
+        .category-name { font-size: 18px; font-weight: 600; color: #212121; }
+        
+        .products { max-width: 1248px; margin: 0 auto; padding: 20px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .section-title { font-size: 28px; color: #212121; }
+        .filter-sort { display: flex; gap: 15px; }
+        .filter-select, .sort-select { padding: 8px 15px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; background: white; cursor: pointer; }
+        
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .product-card { background: white; border-radius: 12px; padding: 20px; text-align: center; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .product-image { width: 200px; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
+        .product-title { font-size: 16px; font-weight: 500; margin-bottom: 10px; color: #212121; }
+        .product-price { color: #388e3c; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
+        .product-brand { color: #878787; font-size: 14px; margin-bottom: 10px; }
+        .add-to-cart-btn { background: #ff9f00; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 500; transition: background 0.3s; width: 100%; }
+        .add-to-cart-btn:hover { background: #fb8c00; }
+        
+        .loading { text-align: center; padding: 40px; font-size: 18px; color: #666; }
+        .notification { position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 4px; color: white; font-weight: bold; z-index: 1001; display: none; }
+        .success { background: #00C851; }
+        .error { background: #ff4444; }
+        
+        @media (max-width: 768px) {
+            .header-container { flex-direction: column; gap: 10px; }
+            .search-bar { width: 100%; margin-right: 0; }
+            .categories-grid, .products-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">E-Store</a>
+            <div class="search-bar">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search fashion products...">
+                <button class="search-btn" onclick="searchProducts()">Search</button>
+            </div>
+            <div class="header-actions">
+                <a href="login.html" class="header-btn" id="loginBtn">Login</a>
+                <div class="cart-icon" onclick="window.location.href='cart.html'">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="fashion.html" class="nav-item active">Fashion</a>
+            <a href="electronics.html" class="nav-item">Electronics</a>
+            <a href="furniture.html" class="nav-item">Furniture</a>
+            <a href="tv.html" class="nav-item">TV</a>
+            <a href="mobiles.html" class="nav-item">Mobiles</a>
+            <a href="about.html" class="nav-item">About Us</a>
+            <a href="contact.html" class="nav-item">Contact</a>
+        </div>
+    </div>
+
+    <!-- Fashion Banner -->
+    <div class="fashion-banner">
+        <h1>👗 Fashion Collection</h1>
+        <p>Discover the latest trends in clothing, shoes, and accessories</p>
+        <a href="#featured" class="shop-fashion-btn">Shop Now</a>
+    </div>
+
+    <!-- Fashion Categories -->
+    <div class="fashion-categories">
+        <h2 class="categories-title">Shop by Category</h2>
+        <div class="categories-grid">
+            <div class="category-card" onclick="filterByCategory('mens')">
+                <div class="category-icon">👔</div>
+                <div class="category-name">Men's Clothing</div>
+            </div>
+            <div class="category-card" onclick="filterByCategory('womens')">
+                <div class="category-icon">👗</div>
+                <div class="category-name">Women's Clothing</div>
+            </div>
+            <div class="category-card" onclick="filterByCategory('shoes')">
+                <div class="category-icon">👟</div>
+                <div class="category-name">Shoes</div>
+            </div>
+            <div class="category-card" onclick="filterByCategory('accessories')">
+                <div class="category-icon">👜</div>
+                <div class="category-name">Accessories</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Featured Products -->
+    <div class="products" id="featured">
+        <div class="section-header">
+            <h2 class="section-title">Featured Fashion Products</h2>
+            <div class="filter-sort">
+                <select class="filter-select" id="categoryFilter" onchange="filterProducts()">
+                    <option value="all">All Categories</option>
+                    <option value="mens">Men's Clothing</option>
+                    <option value="womens">Women's Clothing</option>
+                    <option value="shoes">Shoes</option>
+                    <option value="accessories">Accessories</option>
+                </select>
+                <select class="sort-select" id="sortSelect" onchange="sortProducts()">
+                    <option value="newest">Newest First</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+        <div class="loading" id="productsLoading">Loading fashion products...</div>
+        <div class="products-grid" id="productsGrid"></div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        let fashionProducts = [];
+        let filteredProducts = [];
+
+        // Load fashion products
+        async function loadFashionProducts() {
+            try {
+                const response = await fetch('http://localhost:3000/api/products/fashion');
+                if (response.ok) {
+                    fashionProducts = await response.json();
+                    filteredProducts = [...fashionProducts];
+                    displayProducts();
+                } else {
+                    displaySampleProducts();
+                }
+            } catch (error) {
+                console.log('Failed to load products:', error);
+                displaySampleProducts();
+            } finally {
+                document.getElementById('productsLoading').style.display = 'none';
+            }
+        }
+
+        // Display sample products
+        function displaySampleProducts() {
+            const sampleProducts = [
+                { _id: '1', name: 'Men\'s Casual Shirt', price: 1299, brand: 'Nike', subcategory: 'mens', image: 'https://via.placeholder.com/200x250/ff6b6b/ffffff?text=Men+Shirt' },
+                { _id: '2', name: 'Women\'s Summer Dress', price: 2499, brand: 'Zara', subcategory: 'womens', image: 'https://via.placeholder.com/200x250/ff6b6b/ffffff?text=Women+Dress' },
+                { _id: '3', name: 'Running Shoes', price: 3999, brand: 'Adidas', subcategory: 'shoes', image: 'https://via.placeholder.com/200x250/ff6b6b/ffffff?text=Running+Shoes' },
+                { _id: '4', name: 'Leather Handbag', price: 5999, brand: 'Coach', subcategory: 'accessories', image: 'https://via.placeholder.com/200x250/ff6b6b/ffffff?text=Handbag' },
+                { _id: '5', name: 'Men\'s Jeans', price: 1999, brand: 'Levi\'s', subcategory: 'mens', image: 'https://via.placeholder.com/200x250/ff6b6b/ffffff?text=Men+Jeans' },
+                { _id: '6', name: 'Women\'s Top', price: 899, brand: 'H&M', subcategory: 'womens', image: 'https://via.placeholder.com/200x250/ff6b6b/ffffff?text=Women+Top' }
+            ];
+            fashionProducts = sampleProducts;
+            filteredProducts = [...fashionProducts];
+            displayProducts();
+        }
+
+        // Display products
+        function displayProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = filteredProducts.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-brand">${product.brand}</div>
+                    <div class="product-title">${product.name}</div>
+                    <div class="product-price">₹${product.price.toLocaleString('en-IN')}</div>
+                    <button class="add-to-cart-btn" onclick="addToCart('${product._id}')">Add to Cart</button>
+                </div>
+            `).join('');
+        }
+
+        // Filter products
+        function filterByCategory(category) {
+            document.getElementById('categoryFilter').value = category;
+            filterProducts();
+        }
+
+        function filterProducts() {
+            const category = document.getElementById('categoryFilter').value;
+            if (category === 'all') {
+                filteredProducts = [...fashionProducts];
+            } else {
+                filteredProducts = fashionProducts.filter(p => p.subcategory === category);
+            }
+            sortProducts();
+        }
+
+        // Sort products
+        function sortProducts() {
+            const sortBy = document.getElementById('sortSelect').value;
+            
+            switch(sortBy) {
+                case 'price-low':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'newest':
+                default:
+                    filteredProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            }
+            displayProducts();
+        }
+
+        // Add to cart
+        async function addToCart(productId) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showNotification('Please login to add items to cart', 'error');
+                setTimeout(() => window.location.href = 'login.html', 2000);
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ productId, quantity: 1 })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showNotification('Product added to cart!', 'success');
+                    updateCartCount(data.cartCount);
+                } else {
+                    showNotification('Failed to add to cart', 'error');
+                }
+            } catch (error) {
+                showNotification('Network error. Please try again.', 'error');
+            }
+        }
+
+        // Update cart count
+        function updateCartCount(count) {
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        // Search products
+        function searchProducts() {
+            const query = document.getElementById('searchInput').value;
+            if (query.trim()) {
+                window.location.href = `search.html?q=${encodeURIComponent(query)}&category=fashion`;
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.style.display = 'block';
+            setTimeout(() => notification.style.display = 'none', 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFashionProducts();
+            
+            // Load cart count
+            const token = localStorage.getItem('token');
+            if (token) {
+                fetch('http://localhost:3000/api/cart/count', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }).then(res => res.json()).then(data => updateCartCount(data.count)).catch(() => {});
+            }
+        });
+    </script>
+</body>
+</html>

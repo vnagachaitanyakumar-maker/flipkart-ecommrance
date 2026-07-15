@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3x3 Grid Layout</title>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        
+        .grid-item {
+            min-height: 80px;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+       
+        .grid-item:nth-child(1) { background-color: #FF5733; } 
+        .grid-item:nth-child(2) { background-color: #33FF57; } 
+        .grid-item:nth-child(3) { background-color: #3357FF; } 
+        .grid-item:nth-child(4) { background-color: #F3FF33; color: #333; } 
+        .grid-item:nth-child(5) { background-color: #FF33F5; } 
+        .grid-item:nth-child(6) { background-color: #33FFF5; color: #333; } 
+        .grid-item:nth-child(7) { background-color: #8A2BE2; } 
+        .grid-item:nth-child(8) { background-color: #FF8C00; } 
+        .grid-item:nth-child(9) { background-color: #2E8B57; } 
+        .grid-item:nth-child(10) { background-color: #8B008B; } 
+        .grid-item:nth-child(11) { background-color: #20B2AA; } 
+        .grid-item:nth-child(12) { background-color: #FF4500; } 
+        .grid-item:nth-child(13) { background-color: #4B0082; } 
+        .grid-item:nth-child(14) { background-color: #FFD700; color: #333; } 
+        .grid-item:nth-child(15) { background-color: #000000; } 
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="grid-item">hi</div>
+        <div class="grid-item">hello</div>
+        <div class="grid-item">good</div>
+        <div class="grid-item">morning</div>
+        <div class="grid-item">welcome</div>
+        <div class="grid-item">to</div>
+        <div class="grid-item">section</div>
+        <div class="grid-item">E</div>
+        <div class="grid-item">cse</div>
+        <div class="grid-item">department</div>
+        <div class="grid-item">of</div>
+        <div class="grid-item">mV</div>
+        <div class="grid-item">college</div>
+        <div class="grid-item">of</div>
+        <div class="grid-item">Engineering</div>
+    </div>
+</body>
+</html>

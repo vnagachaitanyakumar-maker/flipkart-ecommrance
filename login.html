@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - E-Store</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #f1f3f6; 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-wrapper { 
+            display: flex; 
+            background: white; 
+            border-radius: 2px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            max-width: 900px; 
+            width: 90%; 
+            overflow: hidden; 
+        }
+        .login-left { 
+            background: #2874f0; 
+            color: white; 
+            padding: 40px; 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+        }
+        .login-left h2 { font-size: 28px; margin-bottom: 20px; font-weight: 500; }
+        .login-left p { font-size: 18px; line-height: 1.5; opacity: 0.9; }
+        .login-right { padding: 40px; flex: 1; min-width: 350px; }
+        .form-group { margin-bottom: 25px; }
+        .form-label { display: block; margin-bottom: 8px; color: #878787; font-size: 12px; font-weight: 500; }
+        .form-input { 
+            width: 100%; 
+            padding: 12px 0; 
+            border: none; 
+            border-bottom: 1px solid #e0e0e0; 
+            font-size: 16px; 
+            outline: none; 
+            transition: border-color 0.3s; 
+        }
+        .form-input:focus { border-bottom-color: #2874f0; }
+        .login-btn { 
+            width: 100%; 
+            padding: 14px; 
+            background: #fb641b; 
+            color: white; 
+            border: none; 
+            font-size: 15px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            margin-top: 20px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+        }
+        .login-btn:hover { background: #f4511e; }
+        .login-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .error-message { 
+            background: #ffebee; 
+            color: #c62828; 
+            padding: 12px; 
+            border-radius: 2px; 
+            margin-bottom: 20px; 
+            font-size: 14px; 
+            display: none; 
+        }
+        .success-message { 
+            background: #e8f5e8; 
+            color: #2e7d32; 
+            padding: 12px; 
+            border-radius: 2px; 
+            margin-bottom: 20px; 
+            font-size: 14px; 
+            display: none; 
+        }
+        .signup-link { 
+            text-align: center; 
+            margin-top: 20px; 
+            font-size: 14px; 
+            color: #2874f0; 
+        }
+        .signup-link a { 
+            color: #2874f0; 
+            text-decoration: none; 
+            font-weight: 600; 
+        }
+        .back-link { 
+            position: absolute; 
+            top: 20px; 
+            left: 20px; 
+            color: #2874f0; 
+            text-decoration: none; 
+            font-size: 14px; 
+        }
+        @media (max-width: 768px) { 
+            .login-wrapper { flex-direction: column; width: 95%; }
+            .login-left { padding: 30px; min-height: 200px; }
+            .login-right { padding: 30px; min-width: auto; }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to Home</a>
+    
+    <div class="login-wrapper">
+        <div class="login-left">
+            <div>
+                <h2>Login</h2>
+                <p>Get access to your Orders, Wishlist and Recommendations</p>
+            </div>
+        </div>
+        <div class="login-right">
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email / Mobile Number</label>
+                    <input type="text" class="form-input" id="email" placeholder="Enter Email or Mobile" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-input" id="password" placeholder="Enter Password" required>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">Login</button>
+            </form>
+
+            <div class="signup-link">
+                New to E-Store? <a href="signup.html">Create an account</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if already logged in
+        const token = localStorage.getItem('token');
+        if (token) {
+            fetch('http://localhost:3000/api/user/profile', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }).then(res => {
+                if (res.ok) window.location.href = 'index.html';
+            });
+        }
+
+        // Handle login
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Logging in...';
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    successDiv.textContent = 'Login successful! Redirecting...';
+                    successDiv.style.display = 'block';
+                    setTimeout(() => window.location.href = 'index.html', 1000);
+                } else {
+                    errorDiv.textContent = data.message || 'Invalid credentials';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Cannot connect to server. Is backend running?';
+                errorDiv.style.display = 'block';
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
+            }
+        });
+    </script>
+</body>
+</html>
