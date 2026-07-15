@@ -19,6 +19,13 @@ A responsive **Flipkart-inspired E-Commerce website** built using **HTML, CSS, J
 - ⚡ Responsive Design
 - 🌐 Express.js Backend
 
+## 🌐 Live Demo
+
+🚀 **Experience the project live here:**
+
+🔗 **GitHub Pages:** https://vnagachaitanyakumar-maker.github.io/flipkart-ecommrance/
+
+
 ---
 
 ## 🛠 Tech Stack
