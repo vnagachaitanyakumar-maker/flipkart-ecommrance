@@ -154,6 +154,6 @@ If you like this project, don't forget to **Star ⭐ the repository**.
 
 ## 📬 Contact
 
-- LinkedIn: https://linkedin.com/in/vn
-- GitHub: https://github.com/your-github
-- Email: your-email@example.com
+- LinkedIn: https://www.linkedin.com/in/v-naga-chaitanya-kumar-9a6b1038b
+- GitHub: https://github.com/your-vnagachaitanyakumar-maker
+- Email: your-vnagachaitanyakumar@gmail.com
