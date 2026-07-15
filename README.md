@@ -98,17 +98,15 @@ nodemon server.js
 
 ## 📸 Screenshots
 
-Add screenshots here after uploading them.
 
-Example:
 
-```
+
+
+
 screenshots/
-    home.png<img width="1897" height="916" alt="image" src="https://github.com/user-attachments/assets/7ca526ca-0409-42e2-a85b-c998d384ad9f" />
+<img width="1897" height="916" alt="image" src="https://github.com/user-attachments/assets/7ca526ca-0409-42e2-a85b-c998d384ad9f" />
 
-    login.png<img width="1910" height="912" alt="image" src="https://github.com/user-attachments/assets/3ad53319-ae67-4f2e-ac73-4e005822fbbb" />
-
-    products.png<img width="1900" height="906" alt="image" src="https://github.com/user-attachments/assets/62214dd7-eeb3-489f-adad-27fb27cc6b62" />
+<img width="1900" height="906" alt="image" src="https://github.com/user-attachments/assets/62214dd7-eeb3-489f-adad-27fb27cc6b62" />
 
 ```
 
